@@ -19,7 +19,17 @@ export default (appInfo: EggAppConfig) => {
   config.keys = appInfo.name + '_1526911046062_143'
 
   // add your config here
-  config.middleware = ['errorHandler', 'joiHandler']
+  config.middleware = ['errorHandler', 'joiHandler', 'notfoundHandler']
+
+  // onerror
+  config.onerror = {
+    all(_, ctx) {
+      // 在此处定义针对所有响应类型的错误处理方法
+      // 注意，定义了 config.all 之后，其他错误处理方法不会再生效
+      ctx.body = { error: { code: -1, message: 'Internal Server Error' } }
+      ctx.status = 200
+    }
+  }
 
   // security
   config.security = {
