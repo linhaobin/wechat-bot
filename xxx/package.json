@@ -1,0 +1,17 @@
+{
+  "name": "wechat-bot",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "linhaobin",
+  "license": "MIT",
+  "scripts": {
+    "start": "docker run -t -i --rm --name wechaty --mount type=bind,source=\"$(pwd)\",target=/bot zixia/wechaty:latest index.ts",
+    "dev-ts": "ts-node index.ts"
+  },
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "rxjs": "^6.1.0",
+    "wechaty": "^0.14.1"
+  },
+  "devDependencies": {}
+}

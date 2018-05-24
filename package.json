@@ -1,17 +1,67 @@
 {
-  "name": "wechat-bot",
-  "version": "0.0.1",
-  "main": "index.js",
-  "author": "linhaobin",
-  "license": "MIT",
+  "name": "ssss",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "egg": {
+    "typescript": true
+  },
   "scripts": {
-    "start": "docker run -t -i --rm --name wechaty --mount type=bind,source=\"$(pwd)\",target=/bot zixia/wechaty:latest index.ts",
-    "dev-ts": "ts-node index.ts"
+    "start": "egg-scripts start --daemon --title=egg-server-ssss",
+    "stop": "egg-scripts stop --title=egg-server-ssss",
+    "dev": "egg-bin dev -r egg-ts-helper/register",
+    "debug": "egg-bin debug -r egg-ts-helper/register",
+    "test-local": "egg-bin test -r egg-ts-helper/register",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "cov": "egg-bin cov -r egg-ts-helper/register",
+    "tsc": "ets && tsc -p tsconfig.json",
+    "ci": "npm run lint && npm run cov && npm run tsc",
+    "autod": "autod",
+    "lint": "tslint .",
+    "clean": "ets clean",
+    "stop-mongodb": "docker-compose -f docker-compose-mongodb.yml stop",
+    "start-mongodb": "docker-compose -f docker-compose-mongodb.yml up -d"
   },
   "dependencies": {
-    "qrcode-terminal": "^0.12.0",
-    "rxjs": "^6.1.0",
-    "wechaty": "^0.14.1"
+    "egg": "^2.6.1",
+    "egg-mongoose": "^2.2.1",
+    "egg-scripts": "^2.6.0",
+    "joi": "^13.3.0",
+    "lodash": "^4.17.10",
+    "validator": "^10.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/joi": "^13.0.8",
+    "@types/lodash": "^4.14.109",
+    "@types/mocha": "^2.2.40",
+    "@types/mongoose": "^5.0.14",
+    "@types/node": "^7.0.12",
+    "@types/supertest": "^2.0.4",
+    "@types/uuid": "^3.4.3",
+    "@types/validator": "^9.4.1",
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-bin": "^4.6.2",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.16.0",
+    "egg-ts-helper": "^1.4.2",
+    "tslib": "^1.9.0",
+    "tslint": "^4.0.0",
+    "typescript": "^2.8.1"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "eslintIgnore": [
+    "coverage"
+  ],
+  "author": "linhaobin",
+  "license": "MIT"
 }
