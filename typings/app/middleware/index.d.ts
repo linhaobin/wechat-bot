@@ -7,8 +7,8 @@ import NotfoundHandler from '../../../app/middleware/notfound_handler';
 
 declare module 'egg' {
   interface IMiddleware {
-    errorHandler: ReturnType<typeof ErrorHandler>;
-    joiHandler: ReturnType<typeof JoiHandler>;
-    notfoundHandler: ReturnType<typeof NotfoundHandler>;
+    errorHandler: typeof ErrorHandler;
+    joiHandler: typeof JoiHandler;
+    notfoundHandler: typeof NotfoundHandler;
   }
 }

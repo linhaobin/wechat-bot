@@ -33,9 +33,9 @@
   "devDependencies": {
     "@types/joi": "^13.0.8",
     "@types/lodash": "^4.14.109",
-    "@types/mocha": "^2.2.40",
+    "@types/mocha": "^5.2.0",
     "@types/mongoose": "^5.0.14",
-    "@types/node": "^7.0.12",
+    "@types/node": "^10.1.2",
     "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "@types/validator": "^9.4.1",
@@ -44,9 +44,9 @@
     "egg-bin": "^4.6.2",
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.16.0",
-    "egg-ts-helper": "^1.4.2",
+    "egg-ts-helper": "^1.7.1",
     "tslib": "^1.9.0",
-    "tslint": "^4.0.0",
+    "tslint": "^5.10.0",
     "typescript": "^2.8.1"
   },
   "engines": {
