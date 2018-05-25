@@ -39,7 +39,8 @@
     ],
     "align": [true, "statements"],
     "semicolon": [true, "never"],
-    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+    "arrow-parens": false
   }
 }
 
