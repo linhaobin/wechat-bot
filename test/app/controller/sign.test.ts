@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { app } from 'egg-mock/bootstrap'
 import * as supertest from 'supertest'
+import ApiError from '../../../app/errors/apiError'
 
 describe('sign/app/controller/sign.test.ts', () => {
   it('sign-in', async () => {
@@ -24,6 +25,6 @@ describe('sign/app/controller/sign.test.ts', () => {
       .expect(200)
 
     const result = response.body
-    assert(result.error && result.error.code === 1)
+    assert(result.error && result.error.code === ApiError.InvalidRequestParameter.code)
   })
 })

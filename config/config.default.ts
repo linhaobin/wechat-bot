@@ -1,5 +1,5 @@
 import { EggAppConfig, PowerPartial } from 'egg'
-import { ApiError } from '../app/constant/error'
+import ApiError from '../app/errors/apiError'
 
 // for config.{env}.ts
 export type DefaultConfig = PowerPartial<EggAppConfig & BizConfig>

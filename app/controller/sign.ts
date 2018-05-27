@@ -1,5 +1,6 @@
 import { Controller } from 'egg'
 import * as Joi from 'joi'
+import ApiError from '../errors/apiError'
 
 // Start signIn 登入参数
 interface SignInRequest {
@@ -31,10 +32,11 @@ export default class SignController extends Controller {
     // 根据用户名查询
     const user = await ctx.service.user.getUserByUsername(params.username)
 
-    if (!user) {
-      throw new Error()
-    }
+    // 用户不存在
+    if (!user) throw ApiError.SignInError
 
-    ctx.body = user
+    // 密码错误
+    // TODO: 密码md5
+    ApiError.SignInError.assert(user.password === params.password)
   }
 }

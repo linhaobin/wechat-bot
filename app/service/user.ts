@@ -11,7 +11,7 @@ export default class Test extends Service {
 
     Object.assign(user, newUser)
 
-    return await user.save()
+    return user.save()
   }
 
   /**
@@ -20,6 +20,6 @@ export default class Test extends Service {
    */
   public async getUserByUsername(username: string) {
     const query = { username }
-    return await this.ctx.model.User.findOne(query)
+    return this.ctx.model.User.findOne(query)
   }
 }

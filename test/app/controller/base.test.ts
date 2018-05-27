@@ -1,7 +1,7 @@
 // import * as assert from 'assert'
 import { app } from 'egg-mock/bootstrap'
 import * as supertest from 'supertest'
-import { ApiError } from '../../../app/constant/error'
+import ApiError from '../../../app/errors/apiError'
 
 describe('test/app/controller/base.test.ts', () => {
   it('404', async () => {
