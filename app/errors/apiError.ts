@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-export default class ApiError extends Error {
+export class ApiError extends Error {
   // 0 - 999 通用错误码
   static InternalServerError = new ApiError(1, 'Internal Server Error')
   static NotFound = new ApiError(2, 'Not Found')
@@ -26,6 +26,8 @@ export default class ApiError extends Error {
     throw this
   }
 }
+
+export default ApiError
 
 export const assert = <V>(value: V, error: ApiError, errorMsg?): NonNullable<V> => {
   if (value) {

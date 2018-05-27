@@ -1,6 +1,6 @@
 import { Mongoose } from 'mongoose'
 import { BaseMockApplication } from 'egg-mock'
-import { assert } from '../app/errors/apiError'
+import { ApiError, assert } from '../app/errors/apiError'
 
 declare module 'egg' {
   // 扩展 app
@@ -10,5 +10,6 @@ declare module 'egg' {
 
   interface IHelper {
     assert: typeof assert
+    ApiError: typeof ApiError
   }
 }

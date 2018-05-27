@@ -47,5 +47,10 @@ export default (appInfo: EggAppConfig) => {
     }
   }
 
+  config.admin = {
+    // 初始密码
+    initPassword: 'admin'
+  }
+
   return config
 }
