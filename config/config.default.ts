@@ -7,6 +7,10 @@ export type DefaultConfig = PowerPartial<EggAppConfig & BizConfig>
 // app special config scheme
 export interface BizConfig {
   sourceUrl: string
+  admin: {
+    username: string
+    initPassword: string
+  }
 }
 
 export default (appInfo: EggAppConfig) => {
@@ -48,8 +52,8 @@ export default (appInfo: EggAppConfig) => {
   }
 
   config.admin = {
-    // 初始密码
-    initPassword: 'admin'
+    username: 'admin', // 用户名
+    initPassword: 'admin' // 初始密码
   }
 
   return config

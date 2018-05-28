@@ -18,4 +18,11 @@ describe('test/app/service/user.test.js', () => {
     assert(result && result._id)
   })
 
+  it('init admin', async () => {
+    await ctx.service.user.initAdmin()
+
+    const result = await ctx.service.user.getUserByUsername(app.config.admin.username)
+    if (!result) return assert(false)
+    assert(result.password === app.config.admin.initPassword)
+  })
 })

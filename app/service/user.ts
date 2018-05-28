@@ -3,6 +3,24 @@ import { User } from '../model/user'
 
 export default class Test extends Service {
   /**
+   * 初始化管理员
+   */
+  public async initAdmin() {
+    const { config, ctx } = this
+    let user = await this.getUserByUsername(config.admin.username)
+
+    if (user) return
+
+    // 如果用户不存在，创建一个admin用户
+    user = new ctx.model.User()
+
+    user.username = config.admin.username
+    // TODO: md5
+    user.password = config.admin.initPassword
+
+    user.save()
+  }
+  /**
    * 保存
    * @param newUser
    */
