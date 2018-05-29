@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import { Context } from 'egg'
 import { app } from 'egg-mock/bootstrap'
-import * as apiError from '../../../../app/errors/apiError'
+import * as apiError from '../../../../app/errors/api_error'
 
 describe('test/app/extend/helper/errors.test.js', () => {
   let ctx: Context

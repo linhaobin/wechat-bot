@@ -1,7 +1,7 @@
 import * as assert from 'assert'
-import ApiError from '../../../app/errors/apiError'
+import ApiError from '../../../app/errors/api_error'
 
-describe('test/app/errors/apiError.test.ts', () => {
+describe('test/app/errors/api_error.test.ts', () => {
   it('new ApiError', async () => {
     const error = new ApiError(1, 'msg')
 

@@ -1,4 +1,4 @@
-import ApiError from '../errors/apiError'
+import ApiError from '../errors/api_error'
 
 export default () => {
   return async function notFoundHandler(ctx, next) {

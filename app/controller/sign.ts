@@ -1,6 +1,6 @@
 import { Controller } from 'egg'
 import * as Joi from 'joi'
-import ApiError from '../errors/apiError'
+import ApiError from '../errors/api_error'
 
 // Start signIn 登入参数
 interface SignInRequest {
