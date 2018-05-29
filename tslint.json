@@ -42,7 +42,9 @@
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
     "arrow-parens": false,
     "no-this-assignment": [true, {"allow-destructuring":true}],
-    "curly": [false]
+    "curly": [false],
+    "no-unused-expression": [true, "allow-fast-null-checks"]
+
   }
 }
 
