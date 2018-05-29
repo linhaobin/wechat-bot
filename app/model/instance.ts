@@ -16,11 +16,14 @@ export default (app: Application): InstanceModel => {
   const { mongoose } = app
   const { Schema } = mongoose
 
-  const schema = new Schema({
-    name: { type: String },
-    description: { type: String },
-    project_ids: [{ type: Schema.Types.ObjectId, ref: 'Project' }]
-  })
+  const schema = new Schema(
+    {
+      name: { type: String },
+      description: { type: String },
+      project_ids: [{ type: Schema.Types.ObjectId, ref: 'Project' }]
+    },
+    { toJSON: { virtuals: true } }
+  )
 
   schema.index({ name: 1 }, { unique: true })
 

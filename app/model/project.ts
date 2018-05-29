@@ -19,17 +19,21 @@ export default (app: Application): ProjectModel => {
   const { mongoose } = app
   const { Schema } = mongoose
 
-  const schema = new Schema({
-    name: { type: String },
-    description: { type: String },
-    disabled: { type: Boolean },
-    instance_ids: [{ type: Schema.Types.ObjectId, ref: 'Instance' }],
-    web_hooks: { type: [String] },
-    token: String
-  })
+  const schema = new Schema(
+    {
+      name: { type: String },
+      description: { type: String },
+      disabled: { type: Boolean },
+      instance_ids: [{ type: Schema.Types.ObjectId, ref: 'Instance' }],
+      web_hooks: { type: [String] },
+      token: String
+    },
+    { toJSON: { virtuals: true } }
+  )
 
   schema.index({ name: 1 }, { unique: true })
 
+  // instances
   schema.virtual('instances', {
     ref: 'Instance',
     localField: 'instance_ids',

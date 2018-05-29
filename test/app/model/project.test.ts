@@ -37,8 +37,9 @@ describe('test/app/model/project.test.js', () => {
 
     // 没有数据则有问题
     if (!findProject) return assert(false)
-
     if (!findProject.instances[0]) return assert(false)
+
+    const json = JSON.stringify(findProject)
 
     // 修改name
     findProject.name = 'new test'
