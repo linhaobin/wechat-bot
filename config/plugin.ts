@@ -9,7 +9,14 @@ const plugin: EggPlugin = {
   mongoose: {
     enable: true,
     package: 'egg-mongoose'
-  }
+  },
+
+  cors: {
+    enable: true,
+    package: 'egg-cors'
+  },
+
+  security: false
 }
 
 export default plugin

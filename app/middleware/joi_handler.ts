@@ -1,7 +1,7 @@
 import ApiError from '../errors/api_error'
 
 export default () => {
-  return async function errorHandler(ctx, next) {
+  return async function errorHandler(_, next) {
     try {
       await next()
     } catch (err) {

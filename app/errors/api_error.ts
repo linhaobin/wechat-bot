@@ -5,7 +5,7 @@ export class ApiError extends Error {
   static NotFound = new ApiError(2, 'Not Found')
   static InvalidRequestParameter = new ApiError(3, '请求参数无效')
   // 1000 - 1999 用户模块
-  static SignInError = new ApiError(1000, '登入失败')
+  static InvalidAccountOrPassword = new ApiError(1000, '帐号或密码错误')
 
   code: number
   details: any

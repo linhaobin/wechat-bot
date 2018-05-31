@@ -33,10 +33,12 @@ export default class SignController extends Controller {
     const user = await ctx.service.user.getUserByUsername(params.username)
 
     // 用户不存在
-    if (!user) throw ApiError.SignInError
+    if (!user) throw ApiError.InvalidAccountOrPassword
 
     // 密码错误
     // TODO: 密码md5
-    ApiError.SignInError.assert(user.password === params.password)
+    ApiError.InvalidAccountOrPassword.assert(user.password === params.password)
+
+    ctx.status = 200
   }
 }

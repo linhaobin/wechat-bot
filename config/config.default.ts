@@ -6,7 +6,6 @@ export type DefaultConfig = PowerPartial<EggAppConfig & BizConfig>
 
 // app special config scheme
 export interface BizConfig {
-  sourceUrl: string
   admin: {
     username: string
     initPassword: string
@@ -16,15 +15,17 @@ export interface BizConfig {
 export default (appInfo: EggAppConfig) => {
   const config = {} as PowerPartial<EggAppConfig> & BizConfig
 
-  // app special config
-  config.sourceUrl = `https://github.com/eggjs/examples/tree/master/${appInfo.name}`
-
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1526911046062_143'
 
+  // cors
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
+  }
   // add your config here
-  config.middleware = ['errorHandler', 'joiHandler', 'notfoundHandler']
+  config.middleware = ['errorHandler', 'joiHandler', 'notfoundHandler', 'nobodyHandler']
 
   // onerror
   config.onerror = {
@@ -33,13 +34,6 @@ export default (appInfo: EggAppConfig) => {
       // 注意，定义了 config.all 之后，其他错误处理方法不会再生效
       ctx.status = 200
       ctx.body = { error: { code: ApiError.InternalServerError.code, message: ApiError.InternalServerError.message } }
-    }
-  }
-
-  // security
-  config.security = {
-    csrf: {
-      ignore: () => true
     }
   }
 
