@@ -39,6 +39,7 @@ export default class SignController extends Controller {
     // TODO: 密码md5
     ApiError.InvalidAccountOrPassword.assert(user.password === params.password)
 
-    ctx.status = 200
+    // TODO: 返回 touken，用于调用接口
+    ctx.success()
   }
 }
