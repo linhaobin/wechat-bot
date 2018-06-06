@@ -29,14 +29,14 @@
     "egg-scripts": "^2.6.0",
     "joi": "^13.3.0",
     "lodash": "^4.17.10",
-    "validator": "^10.2.0"
+    "validator": "^10.3.0"
   },
   "devDependencies": {
     "@types/joi": "^13.0.8",
     "@types/lodash": "^4.14.109",
-    "@types/mocha": "^5.2.0",
-    "@types/mongoose": "^5.0.14",
-    "@types/node": "^10.1.2",
+    "@types/mocha": "^5.2.1",
+    "@types/mongoose": "^5.0.15",
+    "@types/node": "^10.3.1",
     "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "@types/validator": "^9.4.1",
@@ -45,10 +45,10 @@
     "egg-bin": "^4.6.2",
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.16.0",
-    "egg-ts-helper": "^1.7.1",
-    "tslib": "^1.9.0",
+    "egg-ts-helper": "^1.8.0",
+    "tslib": "^1.9.2",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.1"
+    "typescript": "^2.9.1"
   },
   "engines": {
     "node": ">=8.9.0"
