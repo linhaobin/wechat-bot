@@ -19,13 +19,14 @@
     "autod": "autod",
     "lint": "tslint .",
     "clean": "ets clean",
-    "stop-mongodb": "docker-compose -f docker-compose-mongodb.yml stop",
-    "start-mongodb": "docker-compose -f docker-compose-mongodb.yml up -d"
+    "stop-services": "docker-compose -f docker-compose-dev.yml stop",
+    "start-services": "docker-compose -f docker-compose-dev.yml up -d"
   },
   "dependencies": {
     "egg": "^2.6.1",
     "egg-cors": "^2.0.0",
     "egg-mongoose": "^2.2.1",
+    "egg-redis": "^2.0.0",
     "egg-scripts": "^2.6.0",
     "joi": "^13.3.0",
     "lodash": "^4.17.10",

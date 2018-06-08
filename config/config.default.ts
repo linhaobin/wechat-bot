@@ -1,9 +1,6 @@
 import { EggAppConfig, PowerPartial } from 'egg'
 import ApiError from '../app/errors/api_error'
 
-// for config.{env}.ts
-export type DefaultConfig = PowerPartial<EggAppConfig & BizConfig>
-
 // app special config scheme
 export interface BizConfig {
   admin: {
@@ -12,8 +9,12 @@ export interface BizConfig {
   }
 }
 
+// for config.{env}.ts
+export type DefaultConfig = PowerPartial<EggAppConfig & BizConfig>
+
 export default (appInfo: EggAppConfig) => {
-  const config = {} as PowerPartial<EggAppConfig> & BizConfig
+  // const config = {} as PowerPartial<EggAppConfig> & BizConfig
+  const config: DefaultConfig = {}
 
   // override config from framework / plugin
   // use for cookie sign key, should change to your own and keep security
@@ -42,6 +43,16 @@ export default (appInfo: EggAppConfig) => {
     client: {
       url: 'mongodb://127.0.0.1:27017/wechat-bot',
       options: {}
+    }
+  }
+
+  // redis
+  config.redis = {
+    client: {
+      port: 6379, // Redis port
+      host: '127.0.0.1', // Redis host
+      password: null,
+      db: 0
     }
   }
 

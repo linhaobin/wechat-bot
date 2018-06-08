@@ -12,6 +12,15 @@ services:
     volumes:
       - mongodb:/data/db
 
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
 volumes:
   mongodb:
     name: wechat-bot_mongodb
+  redis:
+    name: wechat-bot_redis
