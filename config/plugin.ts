@@ -16,7 +16,7 @@ const plugin: EggPlugin = {
 
   mongoose: {
     enable: true,
-    package: 'egg-mongoose'
+    package: 'egg-mongoose-hb'
   },
 
   redis: {

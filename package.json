@@ -25,11 +25,12 @@
   "dependencies": {
     "egg": "^2.6.1",
     "egg-cors": "^2.0.0",
-    "egg-mongoose": "^2.2.1",
+    "egg-mongoose-hb": "^2.2.1-hb.1",
     "egg-redis": "^2.0.0",
     "egg-scripts": "^2.6.0",
     "joi": "^13.3.0",
     "lodash": "^4.17.10",
+    "mongoose": "^5.1.4",
     "validator": "^10.3.0"
   },
   "devDependencies": {
