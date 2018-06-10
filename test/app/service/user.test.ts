@@ -1,15 +1,13 @@
 import * as assert from 'assert'
 import * as bcrypt from 'bcryptjs'
-import { Application, Context } from 'egg'
-import mock, { BaseMockApplication } from 'egg-mock'
+import { Context } from 'egg'
 import { v4 as uuid } from 'uuid'
+import { app } from '../bootstrap'
 
 describe('test/app/service/user.test.js', () => {
-  let app: BaseMockApplication<Application, Context>
   let ctx: Context
 
   before(async () => {
-    app = mock.app()
     ctx = app.mockContext()
   })
 
