@@ -1,4 +1,5 @@
 import { Context } from 'egg'
+import { isSafeInteger, toNumber } from 'lodash'
 import ApiError from '../errors/api_error'
 import helper from '../extend/helper'
 
@@ -23,8 +24,8 @@ export default () => {
     // }
 
     // 校验timestamp，不能与当前时间前后相差5分钟
-    if (!timestamp) throw ApiError.InvalidSignature
-    const diffNow = Date.now() - timestamp
+    if (!timestamp || !isSafeInteger(toNumber(timestamp))) throw ApiError.InvalidSignature
+    const diffNow = Date.now() - +timestamp
     if (diffNow > MAX_DIFF_TS) throw ApiError.InvalidSignature
 
     if (sessionId) {
