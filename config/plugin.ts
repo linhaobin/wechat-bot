@@ -14,6 +14,8 @@ const plugin: EggPlugin = {
 
   security: false,
 
+  session: false,
+
   mongoose: {
     enable: true,
     package: 'egg-mongoose-hb'

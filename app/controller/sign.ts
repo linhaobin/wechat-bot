@@ -33,4 +33,17 @@ export default class SignController extends Controller {
     // TODO
     ctx.success(session)
   }
+
+  /**
+   * 获取当前登入用户
+   *
+   * @memberof SignService
+   */
+  public async getUser() {
+    const { ctx } = this
+
+    const user = await ctx.getUser()
+
+    ctx.success(user)
+  }
 }
