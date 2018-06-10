@@ -1,14 +1,14 @@
 import * as assert from 'assert'
 import { Application, Context } from 'egg'
-import { app } from 'egg-mock/bootstrap'
+import mock, { BaseMockApplication } from 'egg-mock'
 
 describe('test/app/model/project.test.js', () => {
+  let app: BaseMockApplication<Application, Context>
   let ctx: Context
-  let mongoose
 
   before(async () => {
+    app = mock.app()
     ctx = app.mockContext()
-    mongoose = (app as Application).mongoose
   })
 
   it('crud', async () => {

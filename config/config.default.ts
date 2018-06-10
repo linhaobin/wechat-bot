@@ -3,6 +3,9 @@ import ApiError from '../app/errors/api_error'
 
 // app special config scheme
 export interface BizConfig {
+  session: {
+    expire: number
+  }
   admin: {
     username: string
     initPassword: string
@@ -26,7 +29,7 @@ export default (appInfo: EggAppConfig) => {
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
   }
   // add your config here
-  config.middleware = ['errorHandler', 'joiHandler', 'notfoundHandler', 'nobodyHandler']
+  config.middleware = ['errorHandler', 'joiHandler', 'notfoundHandler', 'nobodyHandler', 'signatureHandler']
 
   // onerror
   config.onerror = {
@@ -56,10 +59,16 @@ export default (appInfo: EggAppConfig) => {
     }
   }
 
+  // session
+  config.session = {
+    expire: 24 * 3600 * 1000 // ms，24小时
+  }
+
+  // admin
   config.admin = {
     username: 'admin', // 用户名
     initPassword: 'admin' // 初始密码
   }
 
-  return config
+  return config as PowerPartial<EggAppConfig> & BizConfig
 }

@@ -17,17 +17,4 @@ describe('test/app/errors/api_error.test.ts', () => {
     assert(error.code === 1)
     assert(error.message === 'msg')
   })
-
-  it('assert', async () => {
-    const error = new ApiError(1, 'msg')
-
-    try {
-      error.assert(false)
-
-      // 应该不会执行
-      assert(false)
-    } catch (err) {
-      assert(err === error)
-    }
-  })
 })

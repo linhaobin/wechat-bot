@@ -1,12 +1,15 @@
 import * as assert from 'assert'
-import { Context } from 'egg'
-import { app } from 'egg-mock/bootstrap'
-import * as uuid from 'uuid/v4'
+import * as bcrypt from 'bcryptjs'
+import { Application, Context } from 'egg'
+import mock, { BaseMockApplication } from 'egg-mock'
+import { v4 as uuid } from 'uuid'
 
 describe('test/app/service/user.test.js', () => {
+  let app: BaseMockApplication<Application, Context>
   let ctx: Context
 
   before(async () => {
+    app = mock.app()
     ctx = app.mockContext()
   })
 
@@ -23,6 +26,6 @@ describe('test/app/service/user.test.js', () => {
 
     const result = await ctx.service.user.getUserByUsername(app.config.admin.username)
     if (!result) return assert(false)
-    assert(result.password === app.config.admin.initPassword)
+    assert(bcrypt.compareSync(app.config.admin.initPassword, result.password))
   })
 })

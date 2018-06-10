@@ -1,7 +1,8 @@
+import * as bcrypt from 'bcryptjs'
 import { Service } from 'egg'
 import { User } from '../model/user'
 
-export default class Test extends Service {
+export default class UserService extends Service {
   /**
    * 初始化管理员
    */
@@ -15,8 +16,8 @@ export default class Test extends Service {
     user = new ctx.model.User()
 
     user.username = config.admin.username
-    // TODO: md5
-    user.password = config.admin.initPassword
+    // password bcrypt
+    user.password = bcrypt.hashSync(config.admin.initPassword, 10)
 
     user.save()
   }

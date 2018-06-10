@@ -1,12 +1,12 @@
 import * as assert from 'assert'
-import { Context } from 'egg'
-import { app } from 'egg-mock/bootstrap'
+import { Application, Context } from 'egg'
+import mock, { BaseMockApplication } from 'egg-mock'
 
 describe('test/app/redis.test.js', () => {
-  let ctx: Context
+  let app: BaseMockApplication<Application, Context>
 
   before(async () => {
-    ctx = app.mockContext()
+    app = mock.app()
   })
 
   it('set and get', async () => {

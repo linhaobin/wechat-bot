@@ -1,17 +1,15 @@
 import * as assert from 'assert'
-import { Context } from 'egg'
-import { app } from 'egg-mock/bootstrap'
+import { Application, Context } from 'egg'
+import mock, { BaseMockApplication } from 'egg-mock'
 import * as apiError from '../../../../app/errors/api_error'
 
 describe('test/app/extend/helper/errors.test.js', () => {
+  let app: BaseMockApplication<Application, Context>
   let ctx: Context
 
   before(async () => {
+    app = mock.app()
     ctx = app.mockContext()
-  })
-
-  it('helper assert', async () => {
-    assert(ctx.helper.assert === apiError.assert)
   })
 
   it('helper ApiError', async () => {

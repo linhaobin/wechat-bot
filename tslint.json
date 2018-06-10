@@ -43,8 +43,8 @@
     "arrow-parens": false,
     "no-this-assignment": [true, {"allow-destructuring":true}],
     "curly": [false],
-    "no-unused-expression": [true, "allow-fast-null-checks"]
-
+    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "no-implicit-dependencies": [true, "dev"]
   }
 }
 

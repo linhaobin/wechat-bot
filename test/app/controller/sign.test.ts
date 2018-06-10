@@ -1,25 +1,35 @@
 import * as assert from 'assert'
-import { app } from 'egg-mock/bootstrap'
-import * as supertest from 'supertest'
+import { Context } from 'egg'
 import ApiError from '../../../app/errors/api_error'
+import { app, httpRequest, httpRequestSignature } from '../bootstrap'
 
 describe('sign/app/controller/sign.test.ts', () => {
+  let ctx: Context
+
+  before(async () => {
+    ctx = app.mockContext()
+  })
+
   it('sign-in', async () => {
-    const httpRequest: supertest.SuperTest<supertest.Test> = app.httpRequest()
-    await httpRequest
+    await ctx.service.user.initAdmin()
+
+    const resp = await httpRequest()
       .post('/sign-in')
+      .use(httpRequestSignature)
       .type('json')
       .send({
-        username: 'admin',
-        password: '20180522'
+        username: app.config.admin.username,
+        password: app.config.admin.initPassword
       })
       .expect(200)
+
+    assert(resp.body && !resp.body.error)
   })
 
   it('sign-in 不传参数', async () => {
-    const httpRequest: supertest.SuperTest<supertest.Test> = app.httpRequest()
-    const response = await httpRequest
+    const response = await httpRequest()
       .post('/sign-in')
+      .use(httpRequestSignature)
       .type('json')
       .send()
       .expect(200)
