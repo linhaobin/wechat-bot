@@ -1,4 +1,4 @@
-import { log, Room, Contact } from 'wechaty'
+import { Room, Contact } from 'wechaty'
 
 export default async function onRoomJoin(room: Room, inviteeList: Contact[], inviter: Contact) {
   const nameList = inviteeList.map(c => c.name()).join(',')

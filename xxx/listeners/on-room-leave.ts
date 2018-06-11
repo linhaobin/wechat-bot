@@ -1,4 +1,4 @@
-import { log, Room, Contact } from 'wechaty'
+import { Room, Contact } from 'wechaty'
 
 export default async function onRoomLeave(room: Room, leaverList: Contact[]) {
   const nameList = leaverList.map(c => c.name()).join(',')

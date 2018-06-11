@@ -30,7 +30,6 @@ export default class SignController extends Controller {
 
     const session = await ctx.service.sign.signIn(params)
 
-    // TODO
     ctx.success(session)
   }
 
