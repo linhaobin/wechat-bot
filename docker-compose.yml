@@ -1,10 +1,46 @@
-version: "3.5"
+version: "3.6"
 
 services:
   wechat-bot:
-    image: mongo
+    image: wechat-bot
     restart: always
+    ports:
+      - 7002:80
+    networks: 
+      - wechat-bot
+    environment:
+      MONGODB_URL: mongodb://mongo:27017/wechat-bot
+      REDIS_HOST: redis
 
-  mongo:
+  mongodb:
     image: mongo
     restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+    networks: 
+      wechat-bot:
+        aliases:
+          - mongo
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    networks: 
+      wechat-bot:
+        aliases:
+          - redis
+
+volumes:
+  mongodb:
+    name: wechat-bot_mongodb
+  redis:
+    name: wechat-bot_redis
+
+networks: 
+  wechat-bot:
+    name: wechat-bot

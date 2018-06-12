@@ -44,7 +44,7 @@ export default (appInfo: EggAppConfig) => {
   // mongose
   config.mongoose = {
     client: {
-      url: 'mongodb://127.0.0.1:27017/wechat-bot',
+      url: process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/wechat-bot',
       options: {}
     }
   }
@@ -52,10 +52,10 @@ export default (appInfo: EggAppConfig) => {
   // redis
   config.redis = {
     client: {
-      port: 6379, // Redis port
-      host: '127.0.0.1', // Redis host
-      password: null,
-      db: 0
+      port: process.env.REDIS_PORT || 6379, // Redis port
+      host: process.env.REDIS_HOST || '127.0.0.1', // Redis host
+      password: process.env.REDIS_PASSWORD || null,
+      db: process.env.REDIS_DB || 0
     }
   }
 

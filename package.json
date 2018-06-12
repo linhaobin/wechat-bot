@@ -7,8 +7,8 @@
     "typescript": true
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-ssss",
-    "stop": "egg-scripts stop --title=egg-server-ssss",
+    "start": "egg-scripts start --title=egg-server-wechat-bot",
+    "stop": "egg-scripts stop --title=egg-server-wechat-bot",
     "dev": "egg-bin dev -r egg-ts-helper/register",
     "debug": "egg-bin debug -r egg-ts-helper/register",
     "test-local": "egg-bin test -r egg-ts-helper/register",
