@@ -1,6 +1,9 @@
-before_script:
-  - docker info
+image: docker:18.03.1-ce
 
-build_image:
+before_script:
+- docker info
+
+build:
+  stage: build
   script:
-    - docker build -t wechat-bot .
+  - docker build -t wechat-bot .
