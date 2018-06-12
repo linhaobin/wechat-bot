@@ -9,6 +9,7 @@ README.md
 LICENSE
 .vscode
 Jenkinsfile
+.gitlab-ci.yml
 
 logs/
 run/
