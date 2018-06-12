@@ -10,3 +10,4 @@ build:
   stage: build
   script:
   - docker build -t wechat-bot .
+  - docker-compose up -d
