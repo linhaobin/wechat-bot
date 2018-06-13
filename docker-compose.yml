@@ -9,8 +9,8 @@ services:
     networks: 
       - wechat-bot
     environment:
-      MONGODB_URL: mongodb://mongo:27017/wechat-bot
-      REDIS_HOST: redis
+      - MONGODB_URL=mongodb://mongo:27017/wechat-bot
+      - REDIS_HOST=redis
 
   mongodb:
     image: mongo
