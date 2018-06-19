@@ -3,10 +3,10 @@ import { isSafeInteger, toNumber } from 'lodash'
 import ApiError from '../errors/api_error'
 import helper from '../extend/helper'
 
-export const SESSION_ID_KEY = 'auth-session-id'
-export const SIGNATURE_KEY = 'auth-signature'
-export const TIMESTAMP_KEY = 'auth-timestamp'
-export const NONCE_KEY = 'auth-nonce'
+export const SESSION_ID_KEY = 'session-id'
+export const SIGNATURE_KEY = 'signature'
+export const TIMESTAMP_KEY = 'timestamp'
+export const NONCE_KEY = 'nonce'
 
 const MAX_DIFF_TS = 5 * 60 * 1000 // 5分钟
 
