@@ -10,32 +10,32 @@ describe('test/app/model/project.test.js', () => {
   })
 
   it('crud', async () => {
-    const { Instance, Project } = ctx.model
+    const { Wechat, Project } = ctx.model
     // 删除name为 ‘test’ 或 ’new test‘
     await Project.deleteMany({ name: { $in: ['test', 'new test'] } })
-    await Instance.deleteMany({ name: { $in: ['test', 'new test'] } })
+    await Wechat.deleteMany({ name: { $in: ['test', 'new test'] } })
 
     const project = new ctx.model.Project()
-    const instance = new ctx.model.Instance()
+    const wechat = new ctx.model.Wechat()
 
     project.name = 'test'
     project.description = 'test desc'
 
-    instance.name = 'test'
-    instance.description = 'test desc'
+    wechat.name = 'test'
+    // instance.description = 'test desc'
 
-    project.instance_ids = [instance._id]
+    project.wechat_ids = [wechat._id]
 
     // 创建
     await project.save()
-    await instance.save()
+    await wechat.save()
 
     // 查询
-    let findProject = await ctx.model.Project.findOne({ name: 'test' }).populate('instances')
+    let findProject = await ctx.model.Project.findOne({ name: 'test' }).populate('wechats')
 
     // 没有数据则有问题
     if (!findProject) return assert(false)
-    if (!findProject.instances[0]) return assert(false)
+    if (!findProject.wechats[0]) return assert(false)
 
     // 修改name
     findProject.name = 'new test'

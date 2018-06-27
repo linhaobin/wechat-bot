@@ -35,16 +35,17 @@
     "lodash": "^4.17.10",
     "mongoose": "^5.1.6",
     "uuid": "^3.2.1",
-    "validator": "^10.4.0"
+    "validator": "^10.4.0",
+    "wechaty": "0.17.24"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.1",
-    "@types/ioredis": "^3.2.9",
+    "@types/ioredis": "^3.2.10",
     "@types/joi": "^13.3.0",
     "@types/lodash": "^4.14.110",
-    "@types/mocha": "^5.2.2",
-    "@types/mongoose": "^5.0.17",
-    "@types/node": "^10.3.4",
+    "@types/mocha": "^5.2.3",
+    "@types/mongoose": "^5.0.18",
+    "@types/node": "^10.3.6",
     "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "@types/validator": "^9.4.1",
@@ -53,8 +54,8 @@
     "egg-bin": "^4.6.2",
     "egg-ci": "^1.8.0",
     "egg-mock": "^3.16.0",
-    "egg-ts-helper": "^1.8.0",
-    "tslib": "^1.9.2",
+    "egg-ts-helper": "^1.9.0",
+    "tslib": "^1.9.3",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2"
   },

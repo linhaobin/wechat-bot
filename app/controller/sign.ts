@@ -36,7 +36,6 @@ export default class SignController extends Controller {
   /**
    * 获取当前登入用户
    *
-   * @memberof SignService
    */
   public async getUser() {
     const { ctx } = this

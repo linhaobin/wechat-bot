@@ -34,7 +34,7 @@ describe('sign/app/controller/sign.test.ts', () => {
 
     // get user
     const getUserResp = await httpRequest()
-      .post('/sign/get-user')
+      .get('/sign/get-user')
       .use(
         httpRequestSignature({
           sessionId: session.id,

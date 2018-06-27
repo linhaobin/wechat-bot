@@ -1,4 +1,5 @@
 import { EggAppConfig, PowerPartial } from 'egg'
+import * as path from 'path'
 import ApiError from '../app/errors/api_error'
 
 // app special config scheme
@@ -9,6 +10,9 @@ export interface BizConfig {
   admin: {
     username: string
     initPassword: string
+  }
+  wechaty: {
+    profilePath: string
   }
 }
 
@@ -68,6 +72,11 @@ export default (appInfo: EggAppConfig) => {
   config.admin = {
     username: 'admin', // 用户名
     initPassword: 'admin' // 初始密码
+  }
+
+  // wechaty
+  config.wechaty = {
+    profilePath: path.resolve(__dirname, '../wechaty')
   }
 
   return config as PowerPartial<EggAppConfig> & BizConfig

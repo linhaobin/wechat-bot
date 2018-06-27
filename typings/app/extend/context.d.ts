@@ -5,6 +5,7 @@ import ExtendObject from '../../../app/extend/context';
 declare module 'egg' {
   interface Context {
     success: typeof ExtendObject.success;
+    getSession: typeof ExtendObject.getSession;
     getUser: typeof ExtendObject.getUser;
   }
 }

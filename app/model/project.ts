@@ -1,13 +1,13 @@
 import { Application } from 'egg'
 import { Document, Model, Types } from 'mongoose'
-import { InstanceDocument } from './instance'
+import { WechatDocument } from './wechat'
 
 export interface Project {
   name: string // 名称
   description?: string // 描述
   disabled: boolean // 是否禁用
-  instance_ids: Types.ObjectId[] // 关联的实例
-  instances: InstanceDocument[] // 关联的实例
+  wechat_ids: Types.ObjectId[] // 关联的实例
+  wechats: WechatDocument[] // 关联的实例
   web_hooks: string[] // webhook
   token?: string
 }
@@ -24,7 +24,7 @@ export default (app: Application): ProjectModel => {
       name: { type: String },
       description: { type: String },
       disabled: { type: Boolean },
-      instance_ids: [{ type: Schema.Types.ObjectId, ref: 'Instance' }],
+      wechat_ids: [{ type: Schema.Types.ObjectId, ref: 'Wechat' }],
       web_hooks: { type: [String] },
       token: String
     },
@@ -34,9 +34,9 @@ export default (app: Application): ProjectModel => {
   schema.index({ name: 1 }, { unique: true })
 
   // instances
-  schema.virtual('instances', {
-    ref: 'Instance',
-    localField: 'instance_ids',
+  schema.virtual('wechats', {
+    ref: 'Wechat',
+    localField: 'wechat_ids',
     foreignField: '_id',
     justOne: false
   })

@@ -15,9 +15,19 @@ const extend = {
    * 获取等钱登录用户
    * @return User
    */
-  async getUser(this: Context) {
+  async getSession(this: Context) {
     const { session } = this
     if (!session) throw ApiError.NotSignIn
+
+    return session
+  },
+
+  /**
+   * 获取等钱登录用户
+   * @return User
+   */
+  async getUser(this: Context) {
+    const session = await this.getSession()
 
     const user = await this.model.User.findById(session.userId)
     if (!user) throw ApiError.NotSignIn
