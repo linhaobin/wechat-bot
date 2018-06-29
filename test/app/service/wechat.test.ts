@@ -13,7 +13,7 @@ describe('test/app/service/wechat.test.js', () => {
     const user = await ctx.service.user.getUserByUsername(app.config.admin.username)
 
     if (!user) {
-      assert(false, '没有用户Z')
+      assert(false, '没有用户')
       return
     }
 
