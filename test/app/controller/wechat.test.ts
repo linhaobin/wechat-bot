@@ -9,7 +9,7 @@ describe('sign/app/controller/wechat.test.ts', () => {
     ctx = app.mockContext()
   })
 
-  it('login', async () => {
+  it('scan', async () => {
     const session = await getSession()
 
     // get user

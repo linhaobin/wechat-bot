@@ -9,7 +9,7 @@ describe('test/app/service/wechat.test.js', () => {
     ctx = app.mockContext()
   })
 
-  it('login', async () => {
+  it('scan', async () => {
     const user = await ctx.service.user.getUserByUsername(app.config.admin.username)
 
     if (!user) {

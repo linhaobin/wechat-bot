@@ -3,11 +3,13 @@ import { Document, Model } from 'mongoose'
 // import { UserDocument } from './user'
 
 export enum WechatSessionStatus {
-  Login,
-  Logout
+  Login = 1,
+  Logout = 2
 }
 
 export interface WechatSession {
+  // user_id: Types.ObjectId
+  // wechat_id: Types.ObjectId
   user_id: string
   wechat_id: string
   wechatUserId: string // 微信用户id

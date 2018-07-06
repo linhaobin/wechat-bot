@@ -20,14 +20,15 @@
     "autod": "autod",
     "lint": "tslint .",
     "clean": "ets clean",
-    "stop-services": "docker-compose -f docker-compose-dev.yml stop",
-    "start-services": "docker-compose -f docker-compose-dev.yml up -d"
+    "stop-services": "docker-compose -f docker-compose-servers.yml stop",
+    "start-services": "docker-compose -f docker-compose-servers.yml up -d",
+    "dev-docker": "docker-compose -f docker-compose.dev.yml up --build "
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "egg": "^2.9.1",
     "egg-cors": "^2.0.0",
-    "egg-mongoose-hb": "^2.2.1-hb.1",
+    "egg-mongoose": "^3.1.0",
     "egg-redis": "^2.0.0",
     "egg-scripts": "^2.6.0",
     "ioredis": "^3.2.2",
@@ -36,7 +37,7 @@
     "mongoose": "^5.1.7",
     "uuid": "^3.3.2",
     "validator": "^10.4.0",
-    "wechaty": "0.17.46"
+    "wechaty": "0.16.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.1",

@@ -1,118 +1,72 @@
 import { Service } from 'egg'
-import * as fs from 'fs'
-import * as path from 'path'
-import { v4 as uuid } from 'uuid'
-import { Contact, Wechaty } from 'wechaty'
+// import { v4 as uuid } from 'uuid'
+import { Contact, Message } from 'wechaty'
+
 import { WechatStatus } from '../model/wechat'
 import { WechatSessionStatus } from '../model/wechat_session'
 
-interface WechatyCache {
-  wechaty: Wechaty
-}
-interface WechatyCachePool {
-  [id: string]: WechatyCache
-}
-const wechatyPool: WechatyCachePool = {}
-
-interface NotLoginWechaty extends Wechaty {
-  userId: string
-  sessionId: string
-}
-interface LoginWechaty extends NotLoginWechaty {
-  wechatUserId: string
-}
-
 export default class WechatService extends Service {
   /**
-   * 登录
+   * 扫码登录
    */
-  public login(userId: string) {
-    return new Promise<{ qrcode: string; status: number }>(async (resolve, reject) => {
-      try {
-        const sessionId = uuid()
-        const wechaty = this.newWechaty({ sessionId, userId })
-        // 扫描事件
-        wechaty.once('scan', async (qrcode: string, status: number) => {
-          resolve({ qrcode, status })
-        })
+  public async scan(userId: string) {
+    const { app } = this
 
-        this.init(wechaty)
+    const ObjectId = app.mongoose.Types.ObjectId
+    const id = new ObjectId().toHexString()
+    const result = await app.wechatClient.loginForPublish({ id, userId })
 
-        wechaty.start().catch(reject)
-      } catch (err) {
-        reject(err)
-      }
-    })
+    return result
   }
 
-  // 重新启动
-  public async restart(sessionId: string) {
-    const profile = this.getProfile(sessionId)
+  /**
+   * handleLogin 处理登录
+   *
+   * @param wechaty
+   * @param wechatUser
+   */
+  public async login(wechaty: any, wechatUser: Contact) {
+    const { app, ctx } = this
 
-    if (!fs.existsSync(profile)) {
-      return
-    }
+    let wechat = await this.getWechatByWechatUserId(wechaty.userId, wechatUser.id)
 
-    const wechat = await this.getWechatBySessionId(sessionId)
+    // save wechat session
+    const ObjectId = app.mongoose.Types.ObjectId
+    const wechatSession = new ctx.model.WechatSession()
 
+    const wechatId = new ObjectId().toHexString()
+    // const userId = new ObjectId(wechaty.userId)
+    // const wechatSessionId = new ObjectId(wechaty.sessionId)
+    const userId = wechaty.userId
+    const wechatSessionId = wechaty.sessionId
+
+    wechatSession._id = wechatSessionId
+    wechatSession.user_id = userId
+    wechatSession.wechat_id = wechatId
+    wechatSession.wechatUserId = wechatUser.id
+    wechatSession.status = WechatSessionStatus.Login
+    wechatSession.loginTime = Date.now()
+
+    // 创建新的Wechat
     if (!wechat) {
-      return
+      wechat = new ctx.model.Wechat()
+      wechat._id = wechatId
+      wechat.user_id = userId
+      wechat.wechatUserId = wechatUser.id
     }
+    wechat.session_id = wechatSessionId
+    wechat.name = wechatUser.name()
+    wechat.status = WechatStatus.Login
 
-    const wechaty = this.newWechaty({ userId: wechat.user_id, sessionId, wechatUserId: wechat.wechatUserId })
-
-    // 扫描事件
-    wechaty.once('scan', async () => {
-      this.logout(wechaty)
-    })
-
-    this.init(wechaty)
-
-    wechaty.start()
+    await Promise.all([wechat.save(), wechatSession.save()])
   }
 
-  public async init(wechaty: NotLoginWechaty) {
-    const { ctx } = this
-
-    wechaty.on('login', async (wechatUser: Contact) => {
-      this.putWechatyCache(wechaty.sessionId, wechaty)
-
-      let wechat = await this.getWechat(wechaty.userId, wechatUser.id)
-
-      // save wechat session
-      const wechatSession = new ctx.model.WechatSession()
-      wechatSession._id = wechaty.sessionId
-      wechatSession.user_id = wechaty.userId
-      wechatSession.wechat_id = wechatUser.id
-      wechatSession.wechatUserId = wechatUser.id
-      wechatSession.status = WechatSessionStatus.Login
-      wechatSession.loginTime = Date.now()
-
-      // 创建新的Wechat
-      if (!wechat) {
-        wechat = new ctx.model.Wechat()
-        wechat._id = wechatUser.id
-        wechat.user_id = wechaty.userId
-        wechat.wechatUserId = wechatUser.id
-      }
-      wechat.session_id = wechaty.sessionId
-      wechat.name = wechatUser.name()
-      wechat.status = WechatStatus.Login
-
-      await Promise.all([wechat.save(), wechatSession.save()])
-    })
-
-    wechaty.on('logout', async () => {
-      this.logout(wechaty)
-    })
-
-    // TODO 1分钟后检查是否已登录，未登录则删除该wechaty
-  }
-
-  // 处理登出
-  private async logout<T extends NotLoginWechaty>(wechaty: T) {
-    this.removeWechatyCache(wechaty.sessionId)
-
+  /**
+   * handleLogout 处理登出
+   *
+   * @param wechaty
+   */
+  public async logout(wechaty: any) {
     const wechatSession = await this.ctx.model.WechatSession.findById(wechaty.sessionId)
 
     if (!wechatSession) return
@@ -130,12 +84,64 @@ export default class WechatService extends Service {
 
     await wechat.save()
   }
+
   /**
-   * 获取Wechat
+   * handleMessage
+   *
+   * @param message
+   */
+  public handleMessage(message: Message): any {
+    console.info('', message.toString())
+  }
+
+  // 重新启动
+  // public async restart(userId: string, sessionId: string) {
+  //   const wechat = await this.getWechatBySessionId(sessionId)
+
+  //   if (!wechat) {
+  //     throw ApiError.InvalidWeChatSessionId
+  //   }
+
+  //   // 判断是否对应userId
+  //   if (userId !== wechat.user_id) {
+  //     throw ApiError.PermissionDenied
+  //   }
+
+  //   const profile = this.getProfile(sessionId)
+  //   if (!fs.existsSync(profile)) {
+  //     throw new Error('wechaty profile not exists')
+  //   }
+
+  //   const wechaty = this.newWechaty({
+  //     userId: wechat.user_id,
+  //     sessionId,
+  //     wechatUserId: wechat.wechatUserId
+  //   })
+
+  //   // 扫描事件
+  //   wechaty.once('scan', async () => {
+  //     this.handleLogout(wechaty)
+  //   })
+
+  //   wechaty.start()
+  // }
+
+  /**
+   * 根据userId获取Wechat
+   *
+   * @param userId 用户id
+   */
+  public getWechatByUserId(userId: string) {
+    return this.ctx.model.Wechat.find({ user_id: userId })
+  }
+
+  /**
+   * 根据微信用户id获取Wechat
+   *
    * @param userId 用户id
    * @param wechatUserId 微信userId
    */
-  private getWechat(userId: string, wechatUserId: string) {
+  public getWechatByWechatUserId(userId: string, wechatUserId: string) {
     return this.ctx.model.Wechat.findOne({ user_id: userId, wechatUserId })
   }
 
@@ -143,51 +149,7 @@ export default class WechatService extends Service {
    * 根据 sessionId 获取 Wechat
    * @param sessionId
    */
-  private getWechatBySessionId(sessionId: string) {
+  public getWechatBySessionId(sessionId: string) {
     return this.ctx.model.Wechat.findOne({ session_id: sessionId })
   }
-
-  // 通过 name 获取Wechaty
-  // private getWechatyByCache(profile: string) {
-  //   return wechatyPool[profile]
-  // }
-  // 通过 name 获取Wechaty
-  private putWechatyCache(id: string, wechaty: Wechaty) {
-    wechatyPool[id] = wechaty
-  }
-
-  // 移除wechaty
-  private removeWechatyCache(id: string) {
-    delete wechatyPool[id]
-  }
-
-  // 获取 profile 路径
-  private getProfile(name: string) {
-    const { config } = this
-
-    return path.resolve(config.wechaty.profilePath, name)
-  }
-
-  private newWechaty(options: { userId: string; sessionId: string }): NotLoginWechaty
-  private newWechaty(options: { userId: string; sessionId: string; wechatUserId: string }): LoginWechaty
-  private newWechaty(options: { userId: string; sessionId: string; wechatUserId?: string }) {
-    const { sessionId, userId, wechatUserId } = options
-    const wechaty = new Wechaty({ profile: this.getProfile(sessionId) })
-    // tslint:disable-next-line
-    ;(wechaty as NotLoginWechaty).sessionId = sessionId
-    // tslint:disable-next-line
-    ;(wechaty as NotLoginWechaty).userId = userId
-
-    if (wechatUserId) {
-      // tslint:disable-next-line
-      ;(wechaty as LoginWechaty).wechatUserId = wechatUserId
-      // tslint:disable-next-line
-    }
-
-    return wechaty
-  }
-
-  // private isLogin(wechaty: Wechaty): wechaty is LoginWechaty {
-  //   return !!(wechaty as LoginWechaty).wechatUserId
-  // }
 }

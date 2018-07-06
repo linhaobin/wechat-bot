@@ -44,7 +44,14 @@
     "no-this-assignment": [true, {"allow-destructuring":true}],
     "curly": [false],
     "no-unused-expression": [true, "allow-fast-null-checks"],
-    "no-implicit-dependencies": [true, "dev"]
-  }
+    "no-implicit-dependencies": [false, "dev"],
+    "no-submodule-imports": [true, "app", "test"]
+  },
+  "rulesDirectory": [
+    "app",
+    "test",
+    "config",
+    "typings"
+  ]
 }
 

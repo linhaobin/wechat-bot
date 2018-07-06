@@ -11,17 +11,18 @@ export const NONCE_KEY = 'nonce'
 const MAX_DIFF_TS = 5 * 60 * 1000 // 5分钟
 
 export default () => {
-  return async function userRequired(ctx: Context, next) {
+  return async function signatureHandler(ctx: Context, next) {
     const sessionId = ctx.get(SESSION_ID_KEY)
     const timestamp = ctx.get(TIMESTAMP_KEY)
     const nonce = ctx.get(NONCE_KEY)
     const signature = ctx.headers[SIGNATURE_KEY]
 
-    // const hashSign = sessionId || signature || timestamp || nonce
-    // if (!hashSign) {
-    //   await next()
-    //   return
-    // }
+    // TODO: ??
+    const hashSign = sessionId || signature || timestamp || nonce
+    if (!hashSign) {
+      await next()
+      return
+    }
 
     // 校验timestamp，不能与当前时间前后相差5分钟
     if (!timestamp || !isSafeInteger(toNumber(timestamp))) throw ApiError.InvalidSignature
