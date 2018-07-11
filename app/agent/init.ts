@@ -2,11 +2,10 @@ import { Agent, Application } from 'egg'
 import WechatClient from '../client/wechat_client'
 
 export default (agent: Agent) => {
-  const config = agent.config as Application['config']
+  // const config = agent.config as Application['config']
   // 对 WechatClient 进行封装和实例化
   agent.wechatClient = new WechatClient({
-    logger: agent.logger,
-    profilePath: config.wechaty.profilePath
+    app: agent as Application
   })
 
   agent.beforeStart(async () => {

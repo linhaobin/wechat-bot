@@ -1,7 +1,7 @@
 import { Controller } from 'egg'
-// import * as Joi from 'joi'
+import * as Joi from 'joi'
 
-// import { ApiError } from '../errors/api_error'
+import { ApiError } from '../errors/api_error'
 
 export default class WechatController extends Controller {
   /**
@@ -33,22 +33,25 @@ export default class WechatController extends Controller {
   /**
    * 重启
    */
-  // public async restart() {
-  //   const { ctx } = this
+  public async restart() {
+    const { ctx } = this
 
-  //   const body: { sessionId: string } = ctx.request.body
+    const body: { wechatUserId: string } = ctx.request.body
 
-  //   const schema = Joi.object().keys({
-  //     sessionid: Joi.string().required()
-  //   })
-  //   const { sessionId } = await schema.validate(body)
+    const schema = Joi.object().keys({
+      wechatUserId: Joi.string().required()
+    })
+    const { wechatUserId } = await schema.validate(body)
 
-  //   if (!sessionId) throw ApiError.InvalidRequestParameter.setDetails('invalid sessionId')
+    if (!wechatUserId) throw ApiError.InvalidRequestParameter.setDetails('invalid wechatUserId')
 
-  //   const session = await ctx.getSession()
+    const session = await ctx.getSession()
 
-  //   await ctx.service.wechat.restart(session.userId, sessionId)
+    await ctx.service.wechat.restart({
+      userId: session.userId,
+      wechatUserId
+    })
 
-  //   ctx.success()
-  // }
+    ctx.success()
+  }
 }

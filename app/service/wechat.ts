@@ -1,7 +1,8 @@
 import { Service } from 'egg'
 // import { v4 as uuid } from 'uuid'
-import { Contact, Message } from 'wechaty'
+import { Message } from 'wechaty'
 
+import ApiError from '../errors/api_error'
 import { WechatStatus } from '../model/wechat'
 import { WechatSessionStatus } from '../model/wechat_session'
 
@@ -25,38 +26,47 @@ export default class WechatService extends Service {
    * @param wechaty
    * @param wechatUser
    */
-  public async login(wechaty: any, wechatUser: Contact) {
+  public async login({
+    wechatSessionId,
+    userId,
+    wechatUserId,
+    name
+  }: {
+    wechatSessionId: string
+    userId: string
+    wechatUserId: string
+    name: string
+  }) {
     const { app, ctx } = this
-
-    let wechat = await this.getWechatByWechatUserId(wechaty.userId, wechatUser.id)
-
-    // save wechat session
     const ObjectId = app.mongoose.Types.ObjectId
-    const wechatSession = new ctx.model.WechatSession()
 
-    const wechatId = new ObjectId().toHexString()
-    // const userId = new ObjectId(wechaty.userId)
-    // const wechatSessionId = new ObjectId(wechaty.sessionId)
-    const userId = wechaty.userId
-    const wechatSessionId = wechaty.sessionId
+    let wechat = await this.getWechatByWechatUserId(userId, wechatUserId)
 
-    wechatSession._id = wechatSessionId
-    wechatSession.user_id = userId
-    wechatSession.wechat_id = wechatId
-    wechatSession.wechatUserId = wechatUser.id
-    wechatSession.status = WechatSessionStatus.Login
-    wechatSession.loginTime = Date.now()
-
-    // 创建新的Wechat
+    // save wechat
     if (!wechat) {
       wechat = new ctx.model.Wechat()
-      wechat._id = wechatId
-      wechat.user_id = userId
-      wechat.wechatUserId = wechatUser.id
+      wechat._id = new ObjectId()
+      wechat.user_id = new ObjectId(userId)
+      wechat.wechatUserId = wechatUserId
+      wechat.name = name
     }
-    wechat.session_id = wechatSessionId
-    wechat.name = wechatUser.name()
+    wechat.session_id = new ObjectId(wechatSessionId)
+    wechat.name = name
     wechat.status = WechatStatus.Login
+
+    let wechatSession = await this.getWechatSessionById(wechatSessionId)
+
+    if (!wechatSession) {
+      wechatSession = new ctx.model.WechatSession()
+      wechatSession._id = new ObjectId(wechatSessionId)
+      wechatSession.user_id = new ObjectId(userId)
+      wechatSession.wechat_id = wechat._id
+      wechatSession.wechatUserId = wechatUserId
+      wechatSession.loginTime = Date.now()
+    }
+    wechatSession.status = WechatSessionStatus.Login
+
+    // save wechat session
 
     await Promise.all([wechat.save(), wechatSession.save()])
   }
@@ -66,10 +76,15 @@ export default class WechatService extends Service {
    *
    * @param wechaty
    */
-  public async logout(wechaty: any) {
-    const wechatSession = await this.ctx.model.WechatSession.findById(wechaty.sessionId)
+  public async logout({ wechatSessionId, userId }: { wechatSessionId: string; userId: string }) {
+    const wechatSession = await this.ctx.model.WechatSession.findById(wechatSessionId)
 
     if (!wechatSession) return
+
+    // 判断是否对应userId
+    if (userId !== wechatSession.user_id.toHexString()) {
+      throw ApiError.PermissionDenied
+    }
 
     // 更新 wechat session 的状态、登出时间
     wechatSession.status = WechatSessionStatus.Logout
@@ -86,6 +101,26 @@ export default class WechatService extends Service {
   }
 
   /**
+   * restart
+   * @param userId 重新启动
+   * @param sessionId
+   */
+  public async restart({ userId, wechatUserId }: { userId: string; wechatUserId: string }) {
+    const { app } = this
+    const wechat = await this.getWechatByWechatUserId(userId, wechatUserId)
+
+    if (!wechat) {
+      throw ApiError.InvalidWeChatSessionId
+    }
+    // 判断是否对应userId
+    if (userId !== wechat.user_id.toHexString()) {
+      throw ApiError.PermissionDenied
+    }
+
+    await app.wechatClient.restart({ id: wechat.session_id.toHexString(), userId })
+  }
+
+  /**
    * handleMessage
    *
    * @param message
@@ -93,38 +128,6 @@ export default class WechatService extends Service {
   public handleMessage(message: Message): any {
     console.info('', message.toString())
   }
-
-  // 重新启动
-  // public async restart(userId: string, sessionId: string) {
-  //   const wechat = await this.getWechatBySessionId(sessionId)
-
-  //   if (!wechat) {
-  //     throw ApiError.InvalidWeChatSessionId
-  //   }
-
-  //   // 判断是否对应userId
-  //   if (userId !== wechat.user_id) {
-  //     throw ApiError.PermissionDenied
-  //   }
-
-  //   const profile = this.getProfile(sessionId)
-  //   if (!fs.existsSync(profile)) {
-  //     throw new Error('wechaty profile not exists')
-  //   }
-
-  //   const wechaty = this.newWechaty({
-  //     userId: wechat.user_id,
-  //     sessionId,
-  //     wechatUserId: wechat.wechatUserId
-  //   })
-
-  //   // 扫描事件
-  //   wechaty.once('scan', async () => {
-  //     this.handleLogout(wechaty)
-  //   })
-
-  //   wechaty.start()
-  // }
 
   /**
    * 根据userId获取Wechat
@@ -151,5 +154,12 @@ export default class WechatService extends Service {
    */
   public getWechatBySessionId(sessionId: string) {
     return this.ctx.model.Wechat.findOne({ session_id: sessionId })
+  }
+  /**
+   * 根据 sessionId 获取 Wechat
+   * @param sessionId
+   */
+  public getWechatSessionById(id: string) {
+    return this.ctx.model.WechatSession.findById(id)
   }
 }

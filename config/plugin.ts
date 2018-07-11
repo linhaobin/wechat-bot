@@ -24,6 +24,11 @@ const plugin: EggPlugin = {
   redis: {
     enable: true,
     package: 'egg-redis'
+  },
+
+  io: {
+    enable: true,
+    package: 'egg-socket.io'
   }
 }
 

@@ -1,0 +1,1 @@
+export const WECHAT_EVENT = 'WECHAT_EVENT'

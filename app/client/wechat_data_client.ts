@@ -1,12 +1,13 @@
-import { Logger } from 'egg'
+import { Application, Logger } from 'egg'
 import * as Base from 'sdk-base'
+import { WECHAT_EVENT } from '../constant/messengerKey'
 import WechatyManager from './wechaty_manager'
 
 // const PUBLISH_KEY = 'wechaty'
 
 export interface Options {
-  profilePath: string
-  logger: Logger
+  // profilePath: string
+  app: Application
 }
 type Listener = (...args: any[]) => void
 /**
@@ -31,6 +32,8 @@ export type PublishData = LoginPublishData
 export default class WechatClusterClient extends Base {
   options: Options
   wechatyManager: WechatyManager
+  app: Application
+  profilePath: string
   logger: Logger
 
   constructor(options: Options) {
@@ -39,15 +42,22 @@ export default class WechatClusterClient extends Base {
       initMethod: 'init'
     })
     this.options = options
-    this.logger = options.logger
+    this.app = options.app
+    this.profilePath = options.app.config.wechaty.profilePath
+    this.logger = options.app.logger
   }
 
   /**
    * 启动逻辑
    */
   async init() {
-    const { profilePath } = this.options
-    this.wechatyManager = new WechatyManager({ profilePath })
+    const { profilePath } = this
+    this.wechatyManager = new WechatyManager({
+      profilePath,
+      on: event => {
+        this.app.messenger.sendRandom(WECHAT_EVENT, event)
+      }
+    })
     this.ready(true)
   }
 
@@ -81,8 +91,12 @@ export default class WechatClusterClient extends Base {
     }
   }
 
-  public login(id: string, userId: string) {
-    return this.wechatyManager.login(id, userId)
+  public login({ id, userId }: { id: string; userId: string }) {
+    return this.wechatyManager.login({ id, userId })
+  }
+
+  public restart({ id, userId }: { id: string; userId: string }) {
+    return this.wechatyManager.start({ id, userId })
   }
 
   /**
@@ -91,7 +105,7 @@ export default class WechatClusterClient extends Base {
   private async publishLogin({ id, userId }: LoginPublishData['payload']) {
     this.logger.info(`login id: ${id}`)
 
-    const result = await this.wechatyManager.login(id, userId)
+    const result = await this.wechatyManager.login({ id, userId })
 
     const key = this.loginKey(id)
     this.emit(key, result)

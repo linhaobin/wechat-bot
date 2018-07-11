@@ -7,9 +7,9 @@
     "typescript": true
   },
   "scripts": {
-    "start": "egg-scripts start --title=egg-server-wechat-bot",
+    "start": "egg-scripts start --title=egg-server-wechat-bot --sticky",
     "stop": "egg-scripts stop --title=egg-server-wechat-bot",
-    "dev": "egg-bin dev -r egg-ts-helper/register",
+    "dev": "egg-bin dev --sticky -r egg-ts-helper/register",
     "debug": "egg-bin debug -r egg-ts-helper/register",
     "test-local": "egg-bin test -r egg-ts-helper/register",
     "test": "npm run lint -- --fix && npm run test-local",
@@ -22,7 +22,7 @@
     "clean": "ets clean",
     "stop-services": "docker-compose -f docker-compose-servers.yml stop",
     "start-services": "docker-compose -f docker-compose-servers.yml up -d",
-    "dev-docker": "docker-compose -f docker-compose.dev.yml up --build "
+    "dev-docker": "docker-compose -f docker-compose.dev.yml up --build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -31,22 +31,26 @@
     "egg-mongoose": "^3.1.0",
     "egg-redis": "^2.0.0",
     "egg-scripts": "^2.6.0",
+    "egg-socket.io": "^4.0.8",
     "ioredis": "^3.2.2",
     "joi": "^13.3.0",
     "lodash": "^4.17.10",
-    "mongoose": "^5.1.7",
+    "mongoose": "^5.2.2",
+    "socket.io": "^2.1.1",
     "uuid": "^3.3.2",
     "validator": "^10.4.0",
-    "wechaty": "0.16.5"
+    "wechaty": "^0.17.119",
+    "wechaty-puppet-padchat": "^0.4.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.1",
-    "@types/ioredis": "^3.2.10",
+    "@types/ioredis": "^3.2.12",
     "@types/joi": "^13.3.0",
-    "@types/lodash": "^4.14.110",
+    "@types/lodash": "^4.14.111",
     "@types/mocha": "^5.2.3",
-    "@types/mongoose": "^5.0.18",
-    "@types/node": "^10.5.1",
+    "@types/mongoose": "^5.2.0",
+    "@types/node": "^10.5.2",
+    "@types/socket.io": "^1.4.36",
     "@types/supertest": "^2.0.4",
     "@types/uuid": "^3.4.3",
     "@types/validator": "^9.4.1",

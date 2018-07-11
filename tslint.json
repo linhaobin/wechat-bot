@@ -39,19 +39,17 @@
     ],
     "align": [true, "statements"],
     "semicolon": [true, "never"],
-    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+    "trailing-comma": [true, {
+      "multiline": "never",
+      "singleline": "never"
+    }],
     "arrow-parens": false,
-    "no-this-assignment": [true, {"allow-destructuring":true}],
+    "no-this-assignment": [true, {
+      "allow-destructuring": true
+    }],
     "curly": [false],
     "no-unused-expression": [true, "allow-fast-null-checks"],
     "no-implicit-dependencies": [false, "dev"],
     "no-submodule-imports": [true, "app", "test"]
-  },
-  "rulesDirectory": [
-    "app",
-    "test",
-    "config",
-    "typings"
-  ]
+  }
 }
-

@@ -1,5 +1,5 @@
 import { Application } from 'egg'
-import { Document, Model } from 'mongoose'
+import { Document, Model, Types } from 'mongoose'
 // import { UserDocument } from './user'
 
 export enum WechatSessionStatus {
@@ -8,10 +8,10 @@ export enum WechatSessionStatus {
 }
 
 export interface WechatSession {
-  // user_id: Types.ObjectId
-  // wechat_id: Types.ObjectId
-  user_id: string
-  wechat_id: string
+  user_id: Types.ObjectId
+  wechat_id: Types.ObjectId
+  // user_id: string
+  // wechat_id: string
   wechatUserId: string // 微信用户id
   status: WechatSessionStatus
   loginTime: number
@@ -30,14 +30,12 @@ export default (app: Application): WechatSessionModel => {
       user_id: { type: Schema.Types.ObjectId, ref: 'User' },
       wechat_id: { type: Schema.Types.ObjectId, ref: 'Wechat' },
       wechatUserId: { type: String },
-      status: { type: String },
+      status: { type: Number },
       loginTime: { type: Number },
       logoutTime: { type: Number }
     },
     { toJSON: { virtuals: true } }
   )
-
-  schema.index({ user_id: 1, wechatUserId: 1 }, { unique: true })
 
   // projects
   // schema.virtual('user', {

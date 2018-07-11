@@ -10,5 +10,5 @@ export default (app: Application) => {
 
   router.get('/wechat', controller.wechat.getWechat)
   router.get('/wechat/scan', controller.wechat.scan)
-  // router.post('/wechat/restart', controller.wechat.restart)
+  router.post('/wechat/restart', controller.wechat.restart)
 }

@@ -1,0 +1,34 @@
+version: "3.5"
+
+services:
+
+  shadowsocks:
+    image: mritd/shadowsocks
+    command:
+      - -m
+      - "ss-local"
+      - -s
+      - "-s 35.201.151.146 -p 56469 -b 0.0.0.0 -l 1080 -m chacha20-ietf-poly1305 -k Gfw7ogikJQAO --fast-open"
+    ports:
+      - "1080:1080"
+    networks:
+      proxy:
+        aliases:
+          - shadowsocks
+    restart: always
+  
+  polipo:
+    image: vimagick/polipo
+    command:
+      socksParentProxy=shadowsocks:1080
+    ports:
+      - "8123:8123"
+    networks:
+      proxy:
+        aliases:
+          - polipo
+    restart: always
+
+networks: 
+  proxy:
+    name: proxy

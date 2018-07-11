@@ -1,11 +1,11 @@
+import { Context as EggContext } from 'egg'
 import { Mongoose } from 'mongoose'
 import { BaseMockApplication } from 'egg-mock'
 import { Redis } from 'ioredis'
 import * as cluster from 'cluster-client'
+import { Socket } from 'socket.io'
 import WechatClient from '../app/client/wechat_client'
 import { ApiError } from '../app/errors/api_error'
-import * as contextExtend from '../app/extend/context'
-import * as helperExtend from '../app/extend/helper'
 
 declare module 'egg' {
   // 扩展 app
@@ -26,10 +26,14 @@ declare module 'egg' {
     expire: number
     expireAt: number
   }
-  interface Context extends ContextExtend {
+  interface Context {
     session: Session
   }
 
+  interface IoContext extends EggContext {
+    socket: Socket // egg-socket.io
+  }
+
   // 扩展 IHelper
-  interface IHelper extends Helper {}
+  interface IHelper {}
 }

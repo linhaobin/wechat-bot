@@ -1,5 +1,5 @@
 import { Application } from 'egg'
-import { Document, Model } from 'mongoose'
+import { Document, Model, Types } from 'mongoose'
 // import { UserDocument } from './user'
 
 export enum WechatStatus {
@@ -8,13 +8,13 @@ export enum WechatStatus {
 }
 
 export interface Wechat {
-  // user_id: Types.ObjectId
-  user_id: string
+  user_id: Types.ObjectId
+  // user_id: string
   wechatUserId: string // 微信用户id
   name: string // 名称
   status: WechatStatus
   // session_id: Types.ObjectId // wechaty profile
-  session_id: string // wechaty profile
+  session_id: Types.ObjectId // wechaty profile
 }
 
 export interface WechatDocument extends Wechat, Document {}
@@ -29,7 +29,7 @@ export default (app: Application): WechatModel => {
       user_id: { type: Schema.Types.ObjectId, ref: 'User' },
       wechatUserId: { type: String },
       name: { type: String },
-      status: { type: String },
+      status: { type: Number },
       session_id: { type: Schema.Types.ObjectId, ref: 'WechatSession' }
     },
     { toJSON: { virtuals: true } }

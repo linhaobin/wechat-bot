@@ -1,0 +1,17 @@
+version: "3.5"
+
+services:
+  app:
+    build: 
+      context: ./
+      dockerfile: Dockerfile.test
+    networks: 
+      - proxy
+    environment:
+      - HTTP_PROXY=http://polipo:8123
+      - HTTPS_PROXY=http://polipo:8123
+
+networks:
+  proxy:
+    external: true
+    name: proxy

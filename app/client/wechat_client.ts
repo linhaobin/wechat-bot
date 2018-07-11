@@ -15,9 +15,9 @@ export default class WechatClient extends Base {
     const wrapper = (options.cluster || cluster)(WechatDataClient, options.clusterOptions)
 
     wrapper.delegate('login', 'invoke')
+    wrapper.delegate('restart', 'invoke')
     this.client = wrapper.create({
-      logger: options.logger,
-      profilePath: options.profilePath
+      app: options.app
     })
   }
 
@@ -28,8 +28,12 @@ export default class WechatClient extends Base {
     this.ready(true)
   }
 
-  login(id: string, userId: string) {
-    return this.client.login(id, userId)
+  login({ id, userId }: { id: string; userId: string }) {
+    return this.client.login({ id, userId })
+  }
+
+  restart({ id, userId }: { id: string; userId: string }) {
+    return this.client.restart({ id, userId })
   }
 
   loginForPublish({ id, userId }: { id: string; userId: string }) {

@@ -63,6 +63,22 @@ export default (appInfo: EggAppConfig) => {
     }
   }
 
+  config.io = {
+    init: {}, // passed to engine.io
+    namespace: {
+      '/': {
+        connectionMiddleware: ['auth'],
+        packetMiddleware: []
+      }
+    },
+    redis: {
+      port: process.env.IO_REDIS_PORT || config.redis.client.port,
+      host: process.env.IO_REDIS_HOST || config.redis.client.host,
+      auth_pass: process.env.IO_REDIS_PASSWORD || config.redis.client.password,
+      db: process.env.IO_REDIS_DB || config.redis.client.db
+    }
+  }
+
   // session
   config.session = {
     expire: 24 * 3600 * 1000 // ms，24小时
